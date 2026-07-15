@@ -3,7 +3,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using Androidplayer.Src.Keymap.K_store;
+using Androidplayer.Store;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Androidplayer.Src.Pages;
@@ -65,7 +66,10 @@ public partial class TitleBar : UserControl
         {
             // ParentWindow?.WindowState = WindowState.Minimized;
             if (ParentWindow != null)
+
+                k_info.Instance.KeymapMode = false;
                 ParentWindow.WindowState = WindowState.Minimized;
+                
         }
         
 
@@ -83,6 +87,9 @@ public partial class TitleBar : UserControl
                     ParentWindow.WindowState = WindowState.Maximized;
                     MaximizeBtn.Content = "❐";
                 }
+                
+                
+                k_info.Instance.KeymapMode = false;
             }
         }
 

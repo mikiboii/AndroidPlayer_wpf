@@ -173,6 +173,8 @@ namespace Androidplayer.Src.Keyboard
                         if (single_key[0].Type == "Visual")
                         {
                             my_info.Instance.Toggle_mouseLock();
+
+                            // Console.WriteLine("Toggle_mouseLock mouse");
                             
                             return;
                             

@@ -165,6 +165,7 @@ namespace Androidplayer.windows
                 section.FPS = this.FPS;
                 section.Bitrate = this.Bitrate;
                 section.AudioEnabled = this.AudioEnabled;
+                section.SelectedConnectionType = this.SelectedConnectionType;
             }
 
             config.Save(ConfigurationSaveMode.Full);
@@ -210,5 +211,20 @@ namespace Androidplayer.windows
                 this["AudioEnabled"] = value; 
                 OnPropertyChanged(nameof(AudioEnabled));
             } }
+        
+        
+        [ConfigurationProperty("SelectedConnectionType", DefaultValue = "USB", IsRequired = false)]
+        public string SelectedConnectionType 
+        { 
+            get => (string)this["SelectedConnectionType"];
+            set 
+            { 
+                this["SelectedConnectionType"] = value; 
+                OnPropertyChanged(nameof(SelectedConnectionType));
+            } 
+        }
+        
+        
+        
     }
 }

@@ -108,6 +108,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Androidplayer.windows;
 
 namespace Androidplayer.Src.Pages
 {
@@ -121,7 +122,10 @@ namespace Androidplayer.Src.Pages
             InitializeComponent();
             SetSelectedText(UsbText);
 
+            this.DataContext = UISettings.Instance;
             
+            // Load saved preference
+            LoadSavedPreference();
             
             this.Loaded += (s, e) =>
             {
@@ -132,12 +136,14 @@ namespace Androidplayer.Src.Pages
         private void UsbText_OnClick(object sender, MouseButtonEventArgs e)
         {
             SetSelectedText(UsbText);
+            SavePreference("USB");
             Console.WriteLine("USB clicked");
         }
 
         private void WirelessText_OnClick(object sender, MouseButtonEventArgs e)
         {
             SetSelectedText(WirelessText);
+            SavePreference("Wireless");
             Console.WriteLine("Wireless clicked");
         }
 
@@ -152,6 +158,85 @@ namespace Androidplayer.Src.Pages
             selected.TextDecorations = TextDecorations.Underline;
         }
 
+        
+        
+        
+        
+        #region Persistence Methods using UISettings
+
+        private void SavePreference(string selected)
+        {
+            try
+            {
+                // Since DataContext is UISettings.Instance, we can cast it
+                var settings = this.DataContext as UISettings;
+                if (settings != null)
+                {
+                    settings.SelectedConnectionType = selected;
+                    settings.Save();
+                    Console.WriteLine($"Preference saved: {selected}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving preference: {ex.Message}");
+            }
+        }
+
+        private void LoadSavedPreference()
+        {
+            try
+            {
+                var settings = this.DataContext as UISettings;
+                Console.WriteLine("loading ##############");
+                if (settings != null)
+                {
+                    string savedPreference = settings.SelectedConnectionType;
+                    
+                    if (!string.IsNullOrEmpty(savedPreference))
+                    {
+                        Console.WriteLine($"Loaded preference: {savedPreference}");
+                        
+                        if (savedPreference == "USB")
+                        {
+                            SetSelectedText(UsbText);
+                        }
+                        else if (savedPreference == "Wireless")
+                        {
+                            SetSelectedText(WirelessText);
+                        }
+                        else
+                        {
+                            // Default to USB if invalid value
+                            SetSelectedText(UsbText);
+                            settings.SelectedConnectionType = "USB";
+                            settings.Save();
+                        }
+                    }
+                    else
+                    {
+                        // Default to USB
+                        SetSelectedText(UsbText);
+                        settings.SelectedConnectionType = "USB";
+                        settings.Save();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading preference: {ex.Message}");
+                // Default to USB on error
+                SetSelectedText(UsbText);
+            }
+        }
+
+        #endregion
+
+        
+        
+        
+        
+        
         public void UpdateProgress(double value, string status)
         {
 

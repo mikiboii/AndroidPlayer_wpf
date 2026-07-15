@@ -5,7 +5,8 @@ using System.Windows; // For Point struct
 using System.Windows.Controls;  // <-- WPF Image
 using System.Windows;
 using System.Windows.Input;
-using Androidplayer.Store; // For Form class
+using Androidplayer.Store;
+using FlyleafLib_01.Controls.WPF; // For Form class
 
 
 
@@ -28,10 +29,12 @@ public class Mouse_Locker
         public int Bottom;
     }
     
-    private System.Windows.Controls.Image my_image;
+    // private System.Windows.Controls.Image my_image;
+    
+    private FlyleafHost my_image;
     private bool isMouseClipped = false;
     
-    public Mouse_Locker(System.Windows.Controls.Image image)
+    public Mouse_Locker(FlyleafHost image)
     {
         my_image = image;
         
@@ -56,7 +59,7 @@ public class Mouse_Locker
 
                 bool ismouselocked = my_info.Instance.IsMouseLocked;
 
-                // Console.WriteLine("from mouse lock");
+                Console.WriteLine("from mouse lock");
 
                 if (ismouselocked == true)
                 {

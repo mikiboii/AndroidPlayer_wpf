@@ -297,7 +297,7 @@ public partial class Display_view : UserControl
             ScaleFormToFit(v_width, v_height);
         }
 
-        // my_mouse_locker = new Mouse_Locker(MainImage);
+        my_mouse_locker = new Mouse_Locker(MainImage);
 
         mouse_normal = new Mouse_normal();
 
