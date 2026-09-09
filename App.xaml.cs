@@ -17,8 +17,8 @@ public partial class App : System.Windows.Application
         
         
         // var home = new Overlay_window();
-        // var home = new Home();
-        var home = new del_window();
+        var home = new Home();
+        // var home = new del_window();
         
         // var home = new Keymap_Window();
         
