@@ -13,10 +13,10 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using Androidplayer.Store;
+using Androidplayer_wpf.Store;
 
 
-namespace Androidplayer.Src.Keymap.Keymap_items
+namespace Androidplayer_wpf.Src.Keymap.Keymap_items
 {
     
    

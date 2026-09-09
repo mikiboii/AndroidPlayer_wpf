@@ -1,4 +1,4 @@
-namespace Androidplayer.Src.Keymap.K_store;
+namespace Androidplayer_wpf.Src.Keymap.K_store;
 using System.Collections.Generic;
 
 public class keymap_handle

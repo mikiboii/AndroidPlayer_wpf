@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using System.Windows;
-using Androidplayer.Src.Keymap.K_store;
+using Androidplayer_wpf.Src.Keymap.K_store;
 
-namespace Androidplayer.windows;
+namespace Androidplayer_wpf.windows;
 
 public partial class Keymap_Window : Window
 {
@@ -160,9 +160,9 @@ public partial class Keymap_Window : Window
 // using System.Runtime.InteropServices;
 // using System.Windows;
 // using System.Windows.Interop;
-// using Androidplayer.Src.Keymap.K_store;
+// using Androidplayer_wpf.Src.Keymap.K_store;
 //
-// namespace Androidplayer.windows;
+// namespace Androidplayer_wpf.windows;
 //
 // public partial class Keymap_Window : Window
 // {

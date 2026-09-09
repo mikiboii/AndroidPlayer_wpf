@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace Androidplayer.windows.settings_view;
+namespace Androidplayer_wpf.windows.settings_view;
 
 public partial class ScreenSettings : UserControl
 {

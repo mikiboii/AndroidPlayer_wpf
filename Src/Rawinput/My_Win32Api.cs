@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Androidplayer.Src.Rawinput
+namespace Androidplayer_wpf.Src.Rawinput
 {
     public class My_Win32Api
     {

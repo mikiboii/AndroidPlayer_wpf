@@ -1,8 +1,8 @@
 using System;
-using Androidplayer.Src.Keymap.K_store;
+using Androidplayer_wpf.Src.Keymap.K_store;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Androidplayer.Store
+namespace Androidplayer_wpf.Store
 {
     public partial class my_info : ObservableObject
     {
@@ -10,7 +10,7 @@ namespace Androidplayer.Store
         private static readonly Lazy<my_info> _instance = new Lazy<my_info>(() => new my_info());
         public static my_info Instance => _instance.Value;
 
-        private bool _developerMode = false;
+        private bool _developerMode = true;
         
         
         

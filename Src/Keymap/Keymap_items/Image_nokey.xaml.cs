@@ -5,10 +5,10 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Androidplayer.Store;
+using Androidplayer_wpf.Store;
 
 
-namespace Androidplayer.Src.Keymap.Keymap_items;
+namespace Androidplayer_wpf.Src.Keymap.Keymap_items;
 
 public partial class Image_nokey : UserControl , IKeymapElement
 {

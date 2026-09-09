@@ -15,7 +15,7 @@ using SharpDX.DXGI;
 using Device = SharpDX.Direct3D11.Device;
 
 
-namespace Androidplayer.Src;
+namespace Androidplayer_wpf.Src;
 
 public unsafe class FFmpeg
     {

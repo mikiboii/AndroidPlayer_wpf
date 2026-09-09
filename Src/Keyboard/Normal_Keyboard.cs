@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using Androidplayer.Src.Keymap;
-using Androidplayer.Src.Android;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Android;
+using Androidplayer_wpf.Store;
+using Androidplayer_wpf.Src.Keymap;
 using WpfKeyEventArgs = System.Windows.Input.KeyEventArgs;
 
-namespace Androidplayer.Src.Keyboard;
+namespace Androidplayer_wpf.Src.Keyboard;
 
 public class Normal_Keyboard
 {

@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Store;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Androidplayer.Src.Pages;
+namespace Androidplayer_wpf.Src.Pages;
 
 public partial class TitleBar : UserControl
 {

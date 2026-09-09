@@ -11,11 +11,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using Androidplayer.Src.Keymap;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Src.Mouse;
-using Androidplayer.Src.Rawinput;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Keymap;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Src.Mouse;
+using Androidplayer_wpf.Src.Rawinput;
+using Androidplayer_wpf.Store;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Drawing.Color;
 using my_MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -27,7 +27,7 @@ using UserControl = System.Windows.Controls.UserControl;
 // using FlyleafLib.Controls.WPF;
 // using FlyleafLib.MediaPlayer;
 
-namespace Androidplayer.Src;
+namespace Androidplayer_wpf.Src;
 
 public partial class Display_view : UserControl
 {

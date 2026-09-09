@@ -10,12 +10,12 @@ using System.Xml;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Src.Keymap.Keymap_items;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Src.Keymap.Keymap_items;
+using Androidplayer_wpf.Store;
 using LiteDB;
 
-namespace Androidplayer.Src.Keymap
+namespace Androidplayer_wpf.Src.Keymap
 {
     public class OverlayManager
     {

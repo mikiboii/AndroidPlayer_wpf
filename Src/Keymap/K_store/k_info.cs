@@ -1,7 +1,7 @@
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Androidplayer.Src.Keymap.K_store
+namespace Androidplayer_wpf.Src.Keymap.K_store
 {
     public partial class k_info : ObservableObject
     {

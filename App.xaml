@@ -1,7 +1,7 @@
-﻿<Application x:Class="Androidplayer.App"
+﻿<Application x:Class="Androidplayer_wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Androidplayer"
+             xmlns:local="clr-namespace:Androidplayer_wpf"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 
 

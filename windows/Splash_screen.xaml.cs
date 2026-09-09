@@ -1,6 +1,6 @@
 // using System.Windows;
 //
-// namespace Androidplayer.windows;
+// namespace Androidplayer_wpf.windows;
 //
 // public partial class Splash_screen : Window
 // {
@@ -16,7 +16,7 @@ using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace Androidplayer.windows
+namespace Androidplayer_wpf.windows
 {
     public partial class Splash_screen : Window
     {

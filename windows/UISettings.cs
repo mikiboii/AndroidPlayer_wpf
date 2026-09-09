@@ -2,7 +2,7 @@
 // using System.ComponentModel;
 // using System.Configuration;
 //
-// namespace Androidplayer.windows
+// namespace Androidplayer_wpf.windows
 // {
 //     internal class UISettings : ConfigurationSection, INotifyPropertyChanged
 //     {
@@ -111,7 +111,7 @@ using System;
 using System.ComponentModel;
 using System.Configuration;
 
-namespace Androidplayer.windows
+namespace Androidplayer_wpf.windows
 {
     internal class UISettings : ConfigurationSection, INotifyPropertyChanged
     {
@@ -166,6 +166,8 @@ namespace Androidplayer.windows
                 section.Bitrate = this.Bitrate;
                 section.AudioEnabled = this.AudioEnabled;
                 section.SelectedConnectionType = this.SelectedConnectionType;
+                
+                section.DeviceIP = this.DeviceIP;
             }
 
             config.Save(ConfigurationSaveMode.Full);
@@ -221,6 +223,21 @@ namespace Androidplayer.windows
             { 
                 this["SelectedConnectionType"] = value; 
                 OnPropertyChanged(nameof(SelectedConnectionType));
+            } 
+        }
+        
+        
+        
+        
+        
+        [ConfigurationProperty("DeviceIP", DefaultValue = "", IsRequired = false)]
+        public string DeviceIP 
+        { 
+            get => (string)this["DeviceIP"];
+            set 
+            { 
+                this["DeviceIP"] = value; 
+                OnPropertyChanged(nameof(DeviceIP));
             } 
         }
         

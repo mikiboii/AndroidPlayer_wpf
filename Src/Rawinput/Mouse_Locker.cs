@@ -5,12 +5,12 @@ using System.Windows; // For Point struct
 using System.Windows.Controls;  // <-- WPF Image
 using System.Windows;
 using System.Windows.Input;
-using Androidplayer.Store;
+using Androidplayer_wpf.Store;
 using FlyleafLib_01.Controls.WPF; // For Form class
 
 
 
-namespace Androidplayer.Src.Rawinput;
+namespace Androidplayer_wpf.Src.Rawinput;
 
 public class Mouse_Locker
 {

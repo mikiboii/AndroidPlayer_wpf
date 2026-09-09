@@ -1,4 +1,4 @@
-namespace Androidplayer.Src.Android
+namespace Androidplayer_wpf.Src.Android
 {
     public enum Touch_id : ulong
     {

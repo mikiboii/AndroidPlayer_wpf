@@ -1,4 +1,4 @@
-<Window x:Class="Androidplayer.windows.Splash_screen"
+<Window x:Class="Androidplayer_wpf.windows.Splash_screen"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Splash_screen"

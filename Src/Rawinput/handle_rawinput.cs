@@ -3,10 +3,10 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using Androidplayer.Src.Mouse;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Mouse;
+using Androidplayer_wpf.Store;
 
-namespace Androidplayer.Src.Rawinput
+namespace Androidplayer_wpf.Src.Rawinput
 {
     public class handle_rawinput
     {

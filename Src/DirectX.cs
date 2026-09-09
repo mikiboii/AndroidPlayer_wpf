@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Androidplayer.Store;
+using Androidplayer_wpf.Store;
 using SharpDX.DXGI;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
@@ -12,7 +12,7 @@ using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
 using SharpDX.WIC;
 
-namespace Androidplayer.Src
+namespace Androidplayer_wpf.Src
 {
    public class DirectX
     {

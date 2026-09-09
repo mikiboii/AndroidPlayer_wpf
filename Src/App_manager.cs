@@ -7,15 +7,15 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Androidplayer.Src.Keymap;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Keymap;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Store;
 using FlyleafLib_01.Controls.WPF;
 // using FlyleafLib.Controls.WPF;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 
-namespace Androidplayer.Src;
+namespace Androidplayer_wpf.Src;
 
 public class App_manager : IDisposable
 {

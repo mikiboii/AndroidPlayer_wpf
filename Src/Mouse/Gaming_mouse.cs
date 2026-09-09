@@ -8,11 +8,11 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
-using Androidplayer.Src.Android;
-using Androidplayer.Src.Keymap;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Android;
+using Androidplayer_wpf.Src.Keymap;
+using Androidplayer_wpf.Store;
 
-namespace Androidplayer.Src.Mouse;
+namespace Androidplayer_wpf.Src.Mouse;
 
 // Improved ExponentialSmoother based on the actual movement patterns
 

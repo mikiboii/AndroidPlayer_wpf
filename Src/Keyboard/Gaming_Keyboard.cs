@@ -8,12 +8,12 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
-using Androidplayer.Src.Android;
-using Androidplayer.Src.Keymap;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Android;
+using Androidplayer_wpf.Src.Keymap;
+using Androidplayer_wpf.Store;
 using WpfKeyEventArgs = System.Windows.Input.KeyEventArgs;
 
-namespace Androidplayer.Src.Keyboard
+namespace Androidplayer_wpf.Src.Keyboard
 {
     public class Gaming_Keyboard
     {

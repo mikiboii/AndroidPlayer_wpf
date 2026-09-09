@@ -17,7 +17,7 @@ using SharpAdbClient;
 
 using System;
 using System.Diagnostics;
-namespace Androidplayer.Src
+namespace Androidplayer_wpf.Src
 {
     
  

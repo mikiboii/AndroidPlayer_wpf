@@ -2,10 +2,9 @@
 using System.Data;
 using System.Windows;
 using System.Windows.Threading;
+using Androidplayer_wpf.windows;
 
-using Androidplayer.windows;
-
-namespace Androidplayer;
+namespace Androidplayer_wpf;
 
 /// <summary>
 /// Interaction logic for App.xaml
@@ -18,7 +17,9 @@ public partial class App : System.Windows.Application
         
         
         // var home = new Overlay_window();
-        var home = new Home();
+        // var home = new Home();
+        var home = new del_window();
+        
         // var home = new Keymap_Window();
         
         

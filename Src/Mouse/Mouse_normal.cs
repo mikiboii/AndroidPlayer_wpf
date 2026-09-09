@@ -5,15 +5,15 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
-using Androidplayer.Src.Android;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Android;
+using Androidplayer_wpf.Store;
 
 // using WinFormsMouseEventArgs  = System.Windows.Forms.MouseEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 using my_flyleaf = FlyleafLib_01.Controls.WPF.FlyleafHost;
 
-namespace Androidplayer.Src.Mouse;
+namespace Androidplayer_wpf.Src.Mouse;
 
 public class Mouse_normal
 {

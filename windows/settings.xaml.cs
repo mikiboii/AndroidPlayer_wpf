@@ -2,9 +2,9 @@ using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Androidplayer.windows.settings_view;
+using Androidplayer_wpf.windows.settings_view;
 
-namespace Androidplayer.windows;
+namespace Androidplayer_wpf.windows;
 
 public partial class settings : Window
 {

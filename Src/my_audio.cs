@@ -4,7 +4,7 @@
 // using FFmpeg.AutoGen;
 // using SharpDX.XAudio2;
 //
-// namespace Androidplayer
+// namespace Androidplayer_wpf
 // {
 //     public unsafe class my_audio : IDisposable
 //     {
@@ -220,7 +220,7 @@ using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 using SharpDX.XAudio2;
 
-namespace Androidplayer
+namespace Androidplayer_wpf
 {
     public unsafe class my_audio : IDisposable
     {

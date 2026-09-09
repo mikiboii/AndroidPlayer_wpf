@@ -5,7 +5,7 @@
 // using System.Windows.Media;
 // using System.Windows.Shapes;
 //
-// namespace Androidplayer.Src.Pages
+// namespace Androidplayer_wpf.Src.Pages
 // {
 //     public partial class Loading_page : UserControl
 //     {
@@ -108,9 +108,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Androidplayer.windows;
+using Androidplayer_wpf.windows;
 
-namespace Androidplayer.Src.Pages
+namespace Androidplayer_wpf.Src.Pages
 {
     public partial class Loading_page : UserControl
     {

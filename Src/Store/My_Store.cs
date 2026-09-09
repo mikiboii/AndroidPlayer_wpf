@@ -5,7 +5,7 @@ using System;
 using System.Net.Sockets;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Androidplayer.Store
+namespace Androidplayer_wpf.Store
 {
     public partial class My_Store : ObservableObject
     {

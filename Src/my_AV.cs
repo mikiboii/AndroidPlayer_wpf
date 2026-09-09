@@ -9,7 +9,7 @@
 // using Device = SharpDX.Direct3D11.Device;
 // using static FFmpeg.AutoGen.ffmpeg;
 //
-// namespace Androidplayer;
+// namespace Androidplayer_wpf;
 //
 // public unsafe class my_AV : IDisposable
 // {
@@ -358,7 +358,7 @@ using SharpDX.DXGI;
 using Device = SharpDX.Direct3D11.Device;
 using static FFmpeg.AutoGen.ffmpeg;
 
-namespace Androidplayer;
+namespace Androidplayer_wpf;
 
 public unsafe class my_AV : IDisposable
 {

@@ -2,12 +2,15 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Keymap;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Store;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Store;
 using LiteDB;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Androidplayer.Src.Keymap;
+namespace Androidplayer_wpf.Src.Keymap;
 
 public partial class keymap_menu : UserControl
 {

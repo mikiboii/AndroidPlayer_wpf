@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using LiteDB;
 
-namespace Androidplayer.Src.Keymap.K_store
+namespace Androidplayer_wpf.Src.Keymap.K_store
 {
     public class LiteDbEditor
     {

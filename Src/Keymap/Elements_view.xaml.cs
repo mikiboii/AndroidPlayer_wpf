@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using UserControl = System.Windows.Controls.UserControl;
 using System.Windows.Input;
-namespace Androidplayer.Src.Keymap;
+namespace Androidplayer_wpf.Src.Keymap;
 
 public partial class Elements_view : UserControl
 {

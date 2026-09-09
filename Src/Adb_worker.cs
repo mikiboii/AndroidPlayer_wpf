@@ -17,9 +17,9 @@ using SharpAdbClient;
 
 using System;
 using System.Diagnostics;
-using Androidplayer.windows;
+using Androidplayer_wpf.windows;
 
-namespace Androidplayer.Src
+namespace Androidplayer_wpf.Src
 {
     
     
@@ -111,6 +111,7 @@ namespace Androidplayer.Src
                 AdbServer server = new AdbServer();
                 StartServerResult result = server.StartServer(@"adb\adb.exe", false);
                 
+                
                 if (result != StartServerResult.Started)
                 {
                     Console.WriteLine($"Server start result: {result}");
@@ -118,6 +119,8 @@ namespace Androidplayer.Src
                 }
                 
                 adbClient = new AdbClient();
+                
+               
 
                 Console.WriteLine("running adb");
 

@@ -9,18 +9,17 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Net.Sockets;
-
-using Androidplayer.Src;
-using Androidplayer.Src.Android;
-using Androidplayer.Src.Keyboard;
-using Androidplayer.Src.Keymap;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Src.Rawinput;
-using Androidplayer.Store;
-using Androidplayer.windows;
+using Androidplayer_wpf.Src.Keyboard;
+using Androidplayer_wpf.Src.Keymap;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Src.Rawinput;
+using Androidplayer_wpf.Store;
+using Androidplayer_wpf.windows;
+using Androidplayer_wpf.Src;
+using Androidplayer_wpf.Src.Android;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
-namespace Androidplayer;
+namespace Androidplayer_wpf;
 
 public partial class Home : Window
 {

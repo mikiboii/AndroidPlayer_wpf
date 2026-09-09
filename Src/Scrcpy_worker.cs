@@ -19,11 +19,10 @@ using System.Windows.Media;
 using SharpDX.Direct3D11;
 using Buffer = System.Buffer;
 using System.Diagnostics;
-using Androidplayer.Src.Keymap;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Store;
-using Androidplayer.windows;
-
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Store;
+using Androidplayer_wpf.windows;
+using Androidplayer_wpf.Src.Keymap;
 using SharpDX;
 using SharpDX.XAudio2;
 using SharpDX.Multimedia;
@@ -32,7 +31,7 @@ using SharpDX.Multimedia;
 
 
 
-namespace Androidplayer.Src
+namespace Androidplayer_wpf.Src
 {
     public class Scrcpy_worker : IDisposable
     {

@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace Androidplayer
+namespace Androidplayer_wpf
 {
     public partial class SidebarWindow : Window
     {

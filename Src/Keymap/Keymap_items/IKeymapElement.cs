@@ -1,4 +1,4 @@
-namespace Androidplayer.Src.Keymap.Keymap_items;
+namespace Androidplayer_wpf.Src.Keymap.Keymap_items;
 
 public interface IKeymapElement
 {

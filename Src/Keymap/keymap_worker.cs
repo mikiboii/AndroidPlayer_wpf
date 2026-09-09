@@ -2,11 +2,11 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using Androidplayer_wpf.Store;
 using LiteDB;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Keymap.K_store;
 
-namespace Androidplayer.Src.Keymap
+namespace Androidplayer_wpf.Src.Keymap
 {
     public class keymap_worker
     {

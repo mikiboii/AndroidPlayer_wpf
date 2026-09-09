@@ -4,11 +4,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 using System.Windows.Media;
-using Androidplayer.Src.Keymap.K_store;
-using Androidplayer.Store;
+using Androidplayer_wpf.Src.Keymap.K_store;
+using Androidplayer_wpf.Store;
 
 
-namespace Androidplayer.Src.Keymap
+namespace Androidplayer_wpf.Src.Keymap
 {
     public partial class List_item : System.Windows.Controls.UserControl
     {

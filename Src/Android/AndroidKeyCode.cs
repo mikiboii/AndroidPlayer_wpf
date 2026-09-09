@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 
 
-namespace Androidplayer.Src.Android;
+namespace Androidplayer_wpf.Src.Android;
 
 
 
