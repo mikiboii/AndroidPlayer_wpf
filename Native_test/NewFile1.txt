@@ -1,0 +1,51 @@
+
+
+see if server is running 
+
+ ps -ef | grep -i -E 'app_process|mobile|mainput|mobileagent'
+
+adb shell "cat /proc/*/cmdline 2>/dev/null | tr '\0' '\n' | grep -i tcg"
+
+
+adb -s 127.0.0.1:62001 shell "cat /proc/*/cmdline 2>/dev/null | tr '\0' '\n' | grep -i tcg"
+
+
+
+
+start server 
+
+W:\Tc games del\TC Games\adb>adb-1-0-41-platform-29-0-6.exe shell "export CLASSPATH=/data/local/tmp/tcg/mobileserver.apk; app_process /system/bin com.sigma_rt.tcg.mobileserver.Main"
+
+adb shell /data/local/tmp/tcg/mobileserverstart.sh
+adb shell /data/local/tmp/tcg/mobileserverstop.sh
+
+
+check ports
+
+adb-1-0-41-platform-29-0-6.exe shell "netstat -tulnp | grep LISTEN"
+
+adb-1-0-41-platform-29-0-6.exe shell "netstat -tnp | grep ESTABLISHED"
+
+
+
+
+print logs 
+
+W:\Tc games del\TC Games\adb>adb-1-0-41-platform-29-0-6.exe shell /data/local/tmp/tcg/Print_log.sh
+
+
+
+forward list 
+
+
+adb forward --list
+
+
+adb forward tcp:10001 tcp:12010
+adb forward tcp:10002 tcp:12003
+adb forward tcp:10003 tcp:12012
+adb forward tcp:10004 tcp:12028
+adb forward tcp:10005 tcp:12026
+adb forward tcp:10006 tcp:12001
+adb forward tcp:10007 tcp:12002
+adb forward tcp:10008 tcp:12015

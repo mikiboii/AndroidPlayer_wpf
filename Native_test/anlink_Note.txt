@@ -1,0 +1,1 @@
+adb shell CLASSPATH=/data/local/tmp/anlink.jar app_process / ink.anl.Server max_size=1080 tunnel_forward=true max_fps=120

@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Androidplayer_wpf.windows"
         mc:Ignorable="d"
-        Title="del_window" Height="450" Width="800">
+        Title="del_window new demo" Height="450" Width="800">
     <Grid>
         <TextBlock Text="Select the resolution 123 " FontSize="50" Foreground="#6B6F77" Margin="0,0,0,12"/>
 

@@ -1,0 +1,172 @@
+// using System.Net;
+// using SharpAdbClient;
+//
+// namespace Androidplayer_wpf.Native_test;
+//
+// public class Tc_test
+// {
+//     
+//     private readonly AdbClient adbClient;
+//     private DeviceData device;
+//     private CancellationTokenSource cts;  
+//     
+//     private Thread _workerThread;
+//     private bool _running = false;
+//     public Tc_test()
+//     {
+//         Console.WriteLine("Tc_test called");
+//         
+//         
+//         try
+//         {
+//             AdbServer server = new AdbServer();
+//             StartServerResult result = server.StartServer(@"adb\adb.exe", false);
+//                 
+//             if (result != StartServerResult.Started)
+//             {
+//                 Console.WriteLine($"Server start result: {result}");
+//                 Console.WriteLine("Can't start adb server");
+//             }
+//                 
+//             adbClient = new AdbClient();
+//
+//             Console.WriteLine("running adb");
+//
+//
+//                
+//                 
+//                 
+//             var monitor = new DeviceMonitor(new AdbSocket(new IPEndPoint(IPAddress.Loopback, AdbClient.AdbServerPort)));
+//             monitor.DeviceDisconnected += this.OnDeviceDisconnected;
+//             monitor.DeviceConnected += this.OnDeviceConnected;
+//             monitor.Start();
+//         }
+//         catch (Exception e)
+//         {
+//             Console.WriteLine($"Error initializing ADB: {e}");
+//                
+//
+//         }
+//         
+//         
+//         deploy_server();
+//         
+//         
+//         
+//     }
+//     
+//     private void OnDeviceConnected(object? sender, DeviceDataEventArgs e)
+//     {
+//                     
+//                    
+//     }
+//         
+//     private void OnDeviceDisconnected(object? sender, DeviceDataEventArgs e)
+//     {
+//         // Console.WriteLine("device disconnected event is working");
+//                    
+//     }
+//
+//
+//     private void deploy_server()
+//     {
+//         
+//         
+//         if ( adbClient == null)
+//         {
+//             return;
+//         }
+//                               
+//         var devices = adbClient.GetDevices().FirstOrDefault();
+//                 
+//         device = devices;
+//                 
+//         if (devices == null)
+//         {
+//             Console.WriteLine("No devices found");
+//                                        
+//             return;
+//         }
+//         Console.WriteLine(device.Serial);
+//         cts = new CancellationTokenSource();
+//                 
+//                 
+//                 
+//         // var receiver = new ConsoleOutputReceiver();
+//         var receiver = new MyReceiver();
+//
+//
+//
+//         // adbClient.CreateForward(device, 10001, 1200);
+//
+//         adbClient.CreateForward(device, 10001, 12010);
+//         adbClient.CreateForward(device, 10002, 12003);
+//         adbClient.CreateForward(device, 10003, 12012);
+//         adbClient.CreateForward(device, 10004, 12028);
+//         adbClient.CreateForward(device, 10005, 12026);
+//         adbClient.CreateForward(device, 10006, 12001);
+//         adbClient.CreateForward(device, 10007, 12002);
+//         adbClient.CreateForward(device, 10008, 12015);
+//         
+//         
+//         adbClient.ExecuteRemoteCommand("/data/local/tmp/tcg/mobileserverstop.sh", device, receiver);
+//         adbClient.ExecuteRemoteCommand("/data/local/tmp/tcg/mobileserverstart.sh", device, receiver);
+//
+//         Console.WriteLine("adb finished!");
+//
+//         // adb shell /data/local/tmp/tcg/mobileserverstart.sh
+//         // adb shell /data/local/tmp/tcg/mobileserverstop.sh
+//
+//     }
+//
+//
+//
+//     public void Start()
+//     {
+//         if (_running) return;
+//         _running = true;
+//
+//         _workerThread = new Thread(Tcp_Server);
+//         _workerThread.IsBackground = true;
+//         _workerThread.Start();
+//             
+//      
+//     }
+//
+//     public void Stop()
+//     {
+//         _running = false;
+//         _workerThread?.Join();
+//         
+//     }
+//     
+//     
+//
+//     private void Tcp_Server()
+//     {
+//
+//         while (_running)
+//         {
+//             
+//             Thread.Sleep(2000);
+//             Console.WriteLine("Tcp server running...");
+//         }
+//         
+//         
+//         
+//         
+//     }
+// }
+//
+
+
+
+
+
+
+
+
+
+
+
+

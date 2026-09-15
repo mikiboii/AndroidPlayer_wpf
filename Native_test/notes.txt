@@ -1,0 +1,4 @@
+adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobile.scrcpy.Server 3.3.2 log_level=info video=true max_size=1080 video_bit_rate=8000000 max_fps=30 video_codec=h264 audio=false tunnel_forward=false control=false cleanup=true send_device_meta=true send_codec_meta=true send_frame_meta=false
+
+
+adb push scrcpy-server /data/local/tmp/scrcpy-server.jar

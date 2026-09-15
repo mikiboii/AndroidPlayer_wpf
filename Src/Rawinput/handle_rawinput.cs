@@ -207,17 +207,38 @@ namespace Androidplayer_wpf.Src.Rawinput
             if (isRelativeMovement && (deltaX != 0 || deltaY != 0))
             {
                 // Process the raw mouse movement
-
+                // Console.WriteLine($"Raw Mouse Delta: X={deltaX}, Y={deltaY}");
+            
                 if (my_info.Instance.IsMouseLocked)
                 {
                     // Console.WriteLine($"Raw Mouse Delta: X={deltaX}, Y={deltaY}");
                     
                     gaming_mouse.mouse_Move(deltaX, deltaY);
                 }
-
-
+            
+            
                 
             }
+            
+            
+            
+            
+            // int deltaX = mouse.lLastX;
+            //     int deltaY = mouse.lLastY;
+            //
+            //     bool isRelativeMovement = (mouse.usFlags & 0x01) == 0; // MOUSE_MOVE_RELATIVE
+            //
+            //     if (isRelativeMovement && (deltaX != 0 || deltaY != 0))
+            //     {
+            //         Console.WriteLine($"Raw Mouse Delta: X={deltaX}, Y={deltaY}");
+            //         if (my_info.Instance.IsMouseLocked)
+            //             gaming_mouse.mouse_Move(deltaX, deltaY);
+            //     }
+            //
+            
+            
+            
+            
 
             if (mouse.ulButtons != 0)
             {

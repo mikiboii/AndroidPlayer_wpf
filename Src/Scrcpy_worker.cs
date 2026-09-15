@@ -154,6 +154,18 @@ namespace Androidplayer_wpf.Src
         private const double MAX_FRAME_TIME_MS = 16.67; // Max 60 FPS
         private Texture2D _pendingFrame; // Store frame if we need to delay rendering
 
+        
+        
+        private sealed class ScrcpyVideoPacket
+        {
+            public byte[] Data { get; init; }
+            public long Pts { get; init; }
+            public bool IsConfig { get; init; }
+            public bool IsKeyFrame { get; init; }
+        }
+        
+        
+        
         public Scrcpy_worker()
         {
 
@@ -278,55 +290,118 @@ namespace Androidplayer_wpf.Src
 
 
 
+        private const int MAX_QUEUED_BUFFERS = 4; // tune: 4 buffers ≈ how much slack you tolerate
 
-        private void SubmitPcmToXAudio(byte[] pcm)
+private void SubmitPcmToXAudio(byte[] pcm)
+{
+    if (pcm == null || pcm.Length == 0) return;
+
+    lock (_audioLock)
+    {
+        if (_sourceVoice == null || !_xaudioStarted) return;
+
+        // ---------------------------------------------------------
+        // Backlog check: if we've queued too many buffers, playback
+        // is falling behind real-time. Flush everything queued and
+        // resync to "now" instead of playing through a growing delay.
+        // ---------------------------------------------------------
+        var state = _sourceVoice.State;
+        if (state.BuffersQueued >= MAX_QUEUED_BUFFERS)
         {
-            if (pcm == null || pcm.Length == 0) return;
+            Console.WriteLine($"Audio backlog: {state.BuffersQueued} buffers queued, flushing to resync");
 
-            lock (_audioLock)
-            {
-                if (_sourceVoice == null || !_xaudioStarted) return;
+            _sourceVoice.Stop();
+            _sourceVoice.FlushSourceBuffers();
+            _sourceVoice.Start();
 
-                // Ensure block alignment (channels * bytesPerSample)
-                int blockAlign = _waveFormat.BlockAlign;
-                if (pcm.Length % blockAlign != 0)
-                {
-                    int paddedLen = ((pcm.Length + blockAlign - 1) / blockAlign) * blockAlign;
-                    Array.Resize(ref pcm, paddedLen); // pads with zeros
-                }
-
-                // Create DataStream and keep it alive until XAudio finishes it
-                var ds = new DataStream(pcm.Length, true, true);
-                ds.Write(pcm, 0, pcm.Length);
-                ds.Position = 0;
-
-                var buffer = new AudioBuffer
-                {
-                    Stream = ds,
-                    AudioBytes = pcm.Length,
-                    Flags = BufferFlags.None // DO NOT set EndOfStream for normal buffers
-                };
-
-                try
-                {
-                    _sourceVoice.SubmitSourceBuffer(buffer, null);
-                    // Track stream for later disposal
-                    _pendingStreams.Enqueue(ds);
-                }
-                catch (SharpDX.SharpDXException ex)
-                {
-                    Console.WriteLine($"XAudio2 submit error: {ex.ResultCode} / {ex.Message}");
-                    // If it fails, release the DataStream immediately
-                    try
-                    {
-                        ds.Dispose();
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
+            // FlushSourceBuffers triggers BufferEnd for everything that
+            // was queued, so your existing _pendingStreams cleanup in
+            // that callback should dispose them. If you instead dispose
+            // streams somewhere else, drain _pendingStreams here too.
         }
+
+        // Ensure block alignment (channels * bytesPerSample)
+        int blockAlign = _waveFormat.BlockAlign;
+        if (pcm.Length % blockAlign != 0)
+        {
+            int paddedLen = ((pcm.Length + blockAlign - 1) / blockAlign) * blockAlign;
+            Array.Resize(ref pcm, paddedLen); // pads with zeros
+        }
+
+        // Create DataStream and keep it alive until XAudio finishes it
+        var ds = new DataStream(pcm.Length, true, true);
+        ds.Write(pcm, 0, pcm.Length);
+        ds.Position = 0;
+
+        var buffer = new AudioBuffer
+        {
+            Stream = ds,
+            AudioBytes = pcm.Length,
+            Flags = BufferFlags.None // DO NOT set EndOfStream for normal buffers
+        };
+
+        try
+        {
+            _sourceVoice.SubmitSourceBuffer(buffer, null);
+            _pendingStreams.Enqueue(ds);
+        }
+        catch (SharpDX.SharpDXException ex)
+        {
+            Console.WriteLine($"XAudio2 submit error: {ex.ResultCode} / {ex.Message}");
+            try { ds.Dispose(); } catch { }
+        }
+    }
+}
+        
+
+        // private void SubmitPcmToXAudio(byte[] pcm)
+        // {
+        //     if (pcm == null || pcm.Length == 0) return;
+        //
+        //     lock (_audioLock)
+        //     {
+        //         if (_sourceVoice == null || !_xaudioStarted) return;
+        //
+        //         // Ensure block alignment (channels * bytesPerSample)
+        //         int blockAlign = _waveFormat.BlockAlign;
+        //         if (pcm.Length % blockAlign != 0)
+        //         {
+        //             int paddedLen = ((pcm.Length + blockAlign - 1) / blockAlign) * blockAlign;
+        //             Array.Resize(ref pcm, paddedLen); // pads with zeros
+        //         }
+        //
+        //         // Create DataStream and keep it alive until XAudio finishes it
+        //         var ds = new DataStream(pcm.Length, true, true);
+        //         ds.Write(pcm, 0, pcm.Length);
+        //         ds.Position = 0;
+        //
+        //         var buffer = new AudioBuffer
+        //         {
+        //             Stream = ds,
+        //             AudioBytes = pcm.Length,
+        //             Flags = BufferFlags.None // DO NOT set EndOfStream for normal buffers
+        //         };
+        //
+        //         try
+        //         {
+        //             _sourceVoice.SubmitSourceBuffer(buffer, null);
+        //             // Track stream for later disposal
+        //             _pendingStreams.Enqueue(ds);
+        //         }
+        //         catch (SharpDX.SharpDXException ex)
+        //         {
+        //             Console.WriteLine($"XAudio2 submit error: {ex.ResultCode} / {ex.Message}");
+        //             // If it fails, release the DataStream immediately
+        //             try
+        //             {
+        //                 ds.Dispose();
+        //             }
+        //             catch
+        //             {
+        //             }
+        //         }
+        //     }
+        // }
 
         private void PollXAudioAndCleanup()
         {
@@ -354,190 +429,144 @@ namespace Androidplayer_wpf.Src
 
 
 
-
+        
         private void start_audio()
+{
+    const long PACKET_FLAG_CONFIG    = 1L << 62;
+    const long PACKET_FLAG_KEY_FRAME = 1L << 61;
+
+    while (isrunning)
+    {
+        audioReadyEvent.Wait();
+
+        // ---------------------------------------------------------
+        // Connect if not already connected
+        // ---------------------------------------------------------
+        if (audioClient == null)
         {
+            audioClient = new TcpClient();
 
-
-            while (isrunning)
+            if (!audioClient.ConnectAsync(host, 1012).Wait(1000))
             {
-
-                audioReadyEvent.Wait();
-
-
-                // Console.WriteLine("audio thread looping ...");
-
-
-                if (audioClient == null)
-                {
-                    audioClient = new TcpClient();
-                    if (!audioClient.ConnectAsync(host, 1012).Wait(1000))
-                    {
-                        // throw new TimeoutException("Control connection timeout");
-                        ErrorOccurred?.Invoke("Control connection timeout");
-
-                    }
-
-
-
-                    Console.WriteLine("audio socket connected");
-
-                    // byte[] codecBuffer = new byte[4];
-                    // int codecRead = audioClient.GetStream().Read(codecBuffer, 0, 4);
-                    // if (codecRead != 4)
-                    // {
-                    //     throw new Exception($"Expected 4 bytes for audio codec metadata, got {codecRead}");
-                    // }
-                    //
-                    // uint codecId = BinaryPrimitives.ReadUInt32BigEndian(codecBuffer);
-                    // Console.WriteLine($"Audio codec ID: {codecId}");
-
-
-                    // audioReadyEvent.Reset();
-
-                    continue;
-
-                }
-
-
-
-
-                try
-                {
-
-                    Console.WriteLine("started reciving audio....");
-                    NetworkStream audioStream = audioClient.GetStream();
-                    audioStream.ReadTimeout = Timeout.Infinite; // wait indefinitely for data
-
-
-
-
-                    byte[] codecBuffer = new byte[4];
-                    int codecRead = audioStream.Read(codecBuffer, 0, 4);
-                    if (codecRead != 4)
-                    {
-                        throw new Exception($"Expected 4 bytes for audio codec metadata, got {codecRead}");
-                    }
-
-                    uint codecId = BinaryPrimitives.ReadUInt32BigEndian(codecBuffer);
-                    Console.WriteLine($"Audio codec ID: {codecId}");
-
-                    // You can now determine OPUS, AAC, etc. based on codecId
-
-                    byte[] buffer = new byte[0x10000]; // 64 KB buffer
-
-                    while (isrunning && audioClient.Connected)
-                    {
-                        int bytesRead = audioStream.Read(buffer, 0, buffer.Length);
-                        if (bytesRead > 0)
-                        {
-                            // copy the actual data received
-                            byte[] receivedAudio = new byte[bytesRead];
-                            Buffer.BlockCopy(buffer, 0, receivedAudio, 0, bytesRead);
-
-
-                            // Console.WriteLine("audio thread looping ...");
-
-                            byte[]? pcm = _audio_decoder?.Decode(receivedAudio);
-
-
-                            // Console.WriteLine(pcm?.Length);
-                            //
-                            // Console.WriteLine("decoded audio");
-
-
-                            // if (pcm != null && pcm.Length > 0)
-                            // {
-                            //     // Wrap the PCM in a XAudio2 buffer
-                            //     var buffer_audio = new AudioBuffer
-                            //     {
-                            //         Stream = new DataStream(pcm.Length, true, true),
-                            //         AudioBytes = pcm.Length,
-                            //         Flags = BufferFlags.EndOfStream
-                            //     };
-                            //     buffer_audio.Stream.Write(pcm, 0, pcm.Length);
-                            //     buffer_audio.Stream.Position = 0; // rewind
-                            //
-                            //     lock (_audioLock)
-                            //     {
-                            //         _sourceVoice.SubmitSourceBuffer(buffer_audio, null);
-                            //     }
-                            // }
-                            //
-
-
-                            // if (pcm != null && pcm.Length > 0)
-                            // {
-                            //     var stream = new DataStream(pcm.Length, true, true);
-                            //     stream.Write(pcm, 0, pcm.Length);
-                            //     stream.Position = 0;
-                            //
-                            //     var buffer_audio = new AudioBuffer
-                            //     {
-                            //         Stream = stream,
-                            //         AudioBytes = pcm.Length,
-                            //         Flags = BufferFlags.None
-                            //     };
-                            //
-                            //     lock (_audioLock)
-                            //     {
-                            //         if (_sourceVoice != null)
-                            //             _sourceVoice.SubmitSourceBuffer(buffer_audio, null);
-                            //         else
-                            //             Console.WriteLine("SourceVoice is null, skipping audio buffer");
-                            //     }
-                            // }
-
-
-
-                            if (pcm != null && pcm.Length > 0)
-                            {
-                                SubmitPcmToXAudio(pcm);
-                            }
-
-
-
-                        }
-                    }
-                }
-                catch (IOException ioEx) when (ioEx.InnerException is SocketException sockEx)
-                {
-                    Console.WriteLine($"Audio socket error: {sockEx.SocketErrorCode}");
-                    ErrorOccurred?.Invoke(sockEx.Message);
-                    // audioClient.Close();
-                    // audioClient = null;
-
-
-                    audioReadyEvent.Reset();
-                    PollXAudioAndCleanup();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Audio receive error: {ex.Message}");
-                    ErrorOccurred?.Invoke(ex.Message);
-                    // audioClient.Close();
-                    // audioClient = null;
-
-                    // audioReadyEvent.Reset();
-                    audioReadyEvent.Reset();
-                    PollXAudioAndCleanup();
-                }
-
-
-
-
-
-                Thread.Sleep(16);
-
-
-
-
+                ErrorOccurred?.Invoke("Control connection timeout");
+                audioClient = null;
+                continue;
             }
 
-
-
+            Console.WriteLine("audio socket connected");
+            continue;
         }
 
+        try
+        {
+            Console.WriteLine("started reciving audio....");
+
+            NetworkStream audioStream = audioClient.GetStream();
+            audioStream.ReadTimeout = Timeout.Infinite;
+
+            // ---------------------------------------------------------
+            // Codec header — sent ONCE per connection (4 bytes BE fourcc)
+            // ---------------------------------------------------------
+            byte[] codecBuffer = new byte[4];
+            if (!ReadExact(audioStream, codecBuffer, 4))
+                throw new IOException("codec header read failed");
+
+            uint codecId = BinaryPrimitives.ReadUInt32BigEndian(codecBuffer);
+            Console.WriteLine($"Audio codec ID: {codecId}");
+
+            byte[] frameMeta = new byte[12];
+
+            // ---------------------------------------------------------
+            // Frame loop:
+            //   [8 bytes BE pts+flags][4 bytes BE size][N bytes payload]
+            // ---------------------------------------------------------
+            while (isrunning && audioClient.Connected)
+            {
+                if (!ReadExact(audioStream, frameMeta, 12))
+                {
+                    Console.WriteLine("audio stream closed (frame meta)");
+                    break;
+                }
+
+                long ptsAndFlags =
+                    BinaryPrimitives.ReadInt64BigEndian(
+                        frameMeta.AsSpan(0, 8));
+
+                int packetSize =
+                    (int)BinaryPrimitives.ReadUInt32BigEndian(
+                        frameMeta.AsSpan(8, 4));
+
+                bool isConfig =
+                    (ptsAndFlags & PACKET_FLAG_CONFIG) != 0;
+
+                if (packetSize <= 0 || packetSize > 1_000_000)
+                {
+                    Console.WriteLine($"Invalid audio packet size: {packetSize}");
+                    break;
+                }
+
+                byte[] payload = new byte[packetSize];
+                if (!ReadExact(audioStream, payload, packetSize))
+                {
+                    Console.WriteLine("audio stream closed (payload)");
+                    break;
+                }
+
+                // -----------------------------------------------------
+                // Config packet (Opus extradata / OpusHead).
+                // Do NOT feed it as a normal frame.
+                // -----------------------------------------------------
+                if (isConfig)
+                {
+                    Console.WriteLine(
+                        $"Audio config packet: {payload.Length} bytes");
+                    _audio_decoder?.SetExtradata(payload);
+                    continue;
+                }
+
+                byte[]? pcm = _audio_decoder?.Decode(payload);
+                if (pcm != null && pcm.Length > 0)
+                    SubmitPcmToXAudio(pcm);
+            }
+        }
+        catch (IOException ioEx) when (ioEx.InnerException is SocketException sockEx)
+        {
+            Console.WriteLine($"Audio socket error: {sockEx.SocketErrorCode}");
+            ErrorOccurred?.Invoke(sockEx.Message);
+            audioReadyEvent.Reset();
+            PollXAudioAndCleanup();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Audio receive error: {ex.Message}");
+            ErrorOccurred?.Invoke(ex.Message);
+            audioReadyEvent.Reset();
+            PollXAudioAndCleanup();
+        }
+        finally
+        {
+            try { audioClient?.Close(); } catch { }
+            audioClient = null;
+        }
+
+        Thread.Sleep(16);
+    }
+}
+
+private static bool ReadExact(NetworkStream stream, byte[] buffer, int count)
+{
+    int offset = 0;
+    while (offset < count)
+    {
+        int read;
+        try { read = stream.Read(buffer, offset, count - offset); }
+        catch { return false; }
+
+        if (read <= 0) return false;
+        offset += read;
+    }
+    return true;
+}
 
 
         #endregion
@@ -863,6 +892,9 @@ namespace Androidplayer_wpf.Src
 
             string mm = null;
 
+            Console.WriteLine("im reciving data");
+            Console.WriteLine(isrunning );
+            Console.WriteLine(videoClient.Connected);
             while (isrunning && videoClient.Connected)
             {
                 try
@@ -871,17 +903,38 @@ namespace Androidplayer_wpf.Src
 
 
                     // Read raw H264 data from the stream
-                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    // int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    // Console.WriteLine(bytesRead);
+                    
+                    ScrcpyVideoPacket packet =
+                        ReadScrcpyVideoPacket(stream);
 
-                    if (bytesRead > 0)
+                    if (packet == null ||
+                        packet.Data == null ||
+                        packet.Data.Length == 0)
                     {
+                        continue;
+                    }
 
 
+                    
+
+                    
+
+
+                    // Console.WriteLine(
+                    //     $"H264 packet: {packet.Data.Length} bytes, " +
+                    //     $"Config={packet.IsConfig}, " +
+                    //     $"Key={packet.IsKeyFrame}, " +
+                    //     $"PTS={packet.Pts}");
+                    
+                    
                         // Create a properly sized array for the received data
-                        byte[] receivedData = new byte[bytesRead];
-                        Buffer.BlockCopy(buffer, 0, receivedData, 0, bytesRead);
+                        // byte[] receivedData = new byte[bytesRead];
+                        // Buffer.BlockCopy(buffer, 0, receivedData, 0, bytesRead);
+                        //
 
-
+                      
                         // Console.WriteLine(receivedData.Length);
 
                         Stopwatch sw = new Stopwatch();
@@ -892,11 +945,25 @@ namespace Androidplayer_wpf.Src
 
 
                             sw.Restart();
-                            Texture2D frame  =  _decoder.Decode(receivedData);
+                            
+                            // Console.WriteLine(
+                            //     $"H264 packet: {receivedData.Length} bytes, " + $"first bytes: {BitConverter.ToString(receivedData, 0,Math.Min(16, receivedData.Length))}");
+                            //
+                            // Texture2D frame  =  _decoder.Decode(receivedData);
+                            
+                            Texture2D frame =
+                                _decoder.DecodePacket(
+                                    packet.Data,
+                                    packet.Pts,
+                                    packet.IsConfig);
                             
                             
                             
                             
+                            if (frame == null)
+                            {
+                                continue;
+                            }
                             
                             
                             if (My_Store.Instance.DisplayHeight == 0 || My_Store.Instance.DisplayHeight != (int)k_info.Instance.ImageContainer.ActualWidth)
@@ -908,7 +975,7 @@ namespace Androidplayer_wpf.Src
                             
                             
                             
-                            if (My_Store.Instance.VideoHeight == 0 || My_Store.Instance.VideoHeight == 0)
+                            if (My_Store.Instance.VideoHeight == 0 || My_Store.Instance.VideoWidth == 0)
                             {
                                 My_Store.Instance.SetVideoResolution(frame.Description.Width, frame.Description.Height);
                             }
@@ -965,7 +1032,7 @@ namespace Androidplayer_wpf.Src
 
 
 
-                    }
+                    
 
                 }
                 catch (IOException ex) when (ex.InnerException is SocketException sockEx)
@@ -1000,11 +1067,77 @@ namespace Androidplayer_wpf.Src
 
 
 
+        private static void ReadExactly(Stream stream, byte[] buffer, int offset, int count)
+        {
+            while (count > 0)
+            {
+                int read = stream.Read(buffer, offset, count);
+
+                if (read <= 0)
+                    throw new IOException("Connection closed while reading video packet.");
+
+                offset += read;
+                count -= read;
+            }
+        }
+        
+        
+        
         protected virtual void OnErrorOccurred(string errorMessage)
         {
             Console.WriteLine($"Error occurred: {errorMessage}");
             _dispatcher.BeginInvoke(DispatcherPriority.Normal,
                 new Action(() => { ErrorOccurred?.Invoke(errorMessage); }));
+        }
+        
+        
+        
+        private ScrcpyVideoPacket ReadScrcpyVideoPacket(Stream stream)
+        {
+            byte[] header = new byte[12];
+
+            ReadExactly(stream, header, 0, 12);
+
+            ulong ptsFlags =
+                ((ulong)header[0] << 56) |
+                ((ulong)header[1] << 48) |
+                ((ulong)header[2] << 40) |
+                ((ulong)header[3] << 32) |
+                ((ulong)header[4] << 24) |
+                ((ulong)header[5] << 16) |
+                ((ulong)header[6] << 8) |
+                header[7];
+
+            int size =
+                (header[8] << 24) |
+                (header[9] << 16) |
+                (header[10] << 8) |
+                header[11];
+
+            if (size <= 0 || size > 10 * 1024 * 1024)
+                throw new InvalidDataException(
+                    $"Invalid scrcpy video packet size: {size}");
+
+            byte[] data = new byte[size];
+
+            ReadExactly(stream, data, 0, size);
+
+            bool isConfig =
+                (ptsFlags & (1UL << 63)) != 0;
+
+            bool isKeyFrame =
+                (ptsFlags & (1UL << 62)) != 0;
+
+            long pts =
+                (long)(ptsFlags & ((1UL << 62) - 1));
+
+            return new ScrcpyVideoPacket
+            {
+                Data = data,
+                Pts = pts,
+                IsConfig = isConfig,
+                IsKeyFrame = isKeyFrame
+            };
         }
 
         public void Dispose()

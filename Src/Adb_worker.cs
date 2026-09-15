@@ -400,7 +400,43 @@ namespace Androidplayer_wpf.Src
                     "cleanup=true",
                     "send_device_meta=true",
                     "send_codec_meta=true",
-                    "send_frame_meta=false"
+                    "send_frame_meta=true"
+                };
+var back_cmd = new List<string>
+                {
+                    "CLASSPATH=/data/local/tmp/scrcpy-server.jar",
+                    "app_process",
+                    "/",
+                    "com.genymobile.scrcpy.Server",
+                    "3.3.2",
+
+                    "log_level=info",
+
+                    "video=true",
+
+                    // ---- VIDEO SETTINGS FIRST ----
+                    $"max_size={max_size}",
+                
+                    $"video_bit_rate={1000000 * UISettings.Instance.Bitrate}",
+                    
+
+                    $"max_fps={UISettings.Instance.FPS}",
+                    "video_codec=h264",
+
+                    // ---- AUDIO SETTINGS AFTER VIDEO ----
+                    $"audio={UISettings.Instance.AudioEnabled}",
+                    
+
+
+                    // ---- CONTROL + TUNNEL ----
+                    "tunnel_forward=true",
+                    "control=true",
+
+                    "cleanup=true",
+                    "send_device_meta=true",
+                    "send_codec_meta=true",
+                    "send_frame_meta=false", 
+                    "</dev/null >/dev/null 2>&1 &"
                 };
 
                 
@@ -449,6 +485,9 @@ namespace Androidplayer_wpf.Src
                 // adb forward tcp:1717 localabstract:minicap
                 
                 string command = string.Join(" ", cmd);
+                // string command = string.Join(" ", back_cmd);
+                
+                
                 // _ = adbClient.ExecuteRemoteCommandAsync(command, devices, receiver, cts.Token);
                 
 
@@ -473,6 +512,11 @@ namespace Androidplayer_wpf.Src
                
                 try
                 {
+                    // string adb_cmd2 = "cd adb && adb.exe  shell \"CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process / com.genymobile.scrcpy.Server 3.3.2 log_level=info video=true max_size=1080 video_bit_rate=8000000 max_fps=30 video_codec=h264 audio=false tunnel_forward=true control=true cleanup=true send_device_meta=true send_codec_meta=true send_frame_meta=false </dev/null >/dev/null 2>&1 &\"";
+                    //
+                    // string result2 = ShellHelper_2.ExecuteCommand(adb_cmd2);
+                    // Console.WriteLine(result2);
+                    //
                     _ = adbClient.ExecuteRemoteCommandAsync(command, device, receiver, cts.Token);
                     // adbClient.ExecuteRemoteCommandAsync(command, device, receiver, cts.Token).Wait(cts.Token);
                 }
@@ -481,6 +525,8 @@ namespace Androidplayer_wpf.Src
                     Console.WriteLine("ADB command cancelled.");
                     ErrorOccurred?.Invoke("server exited");
                 }
+
+                Console.WriteLine("adb continued running ##########");
 
 
                 // adbClient.ExecuteRemoteCommand(command, device, receiver);

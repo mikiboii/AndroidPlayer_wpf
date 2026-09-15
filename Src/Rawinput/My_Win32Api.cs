@@ -188,22 +188,40 @@ namespace Androidplayer_wpf.Src.Rawinput
             public uint ExtraInformation;
         }
 
+        // [StructLayout(LayoutKind.Explicit)]
+        // public struct RAWINPUT
+        // {
+        //     [FieldOffset(0)]
+        //     public RAWINPUTHEADER header;
+        //
+        //     [FieldOffset(16)]
+        //     public RAWMOUSE mouse;
+        //
+        //     [FieldOffset(16)]
+        //     public RAWKEYBOARD keyboard;
+        //
+        //     [FieldOffset(16)]
+        //     public RAWHID hid;
+        // }
+
+        
         [StructLayout(LayoutKind.Explicit)]
         public struct RAWINPUT
         {
             [FieldOffset(0)]
             public RAWINPUTHEADER header;
 
-            [FieldOffset(16)]
+            [FieldOffset(24)]  // x64 offset
             public RAWMOUSE mouse;
 
-            [FieldOffset(16)]
+            [FieldOffset(24)]
             public RAWKEYBOARD keyboard;
 
-            [FieldOffset(16)]
+            [FieldOffset(24)]
             public RAWHID hid;
         }
-
+        
+        
         // Additional useful methods
         public static bool ClipMouse(RECT rect)
         {
